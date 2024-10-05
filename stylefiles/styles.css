@@ -361,9 +361,9 @@ body {
 	overflow-y: auto;
 }
 
-#modal-planet-right p {
+#modal-planet-right li {
 	font-family: 'Courier New', Courier, monospace;
-	font-size: 20px;
+	font-size: 13px;
 	margin-bottom: 10px;
 	line-height: 1.5;
 	color: #f2f2f2;
@@ -459,6 +459,7 @@ body {
 	height: 80px;
 	transform: translate(-50%, -50%);
 	cursor: pointer;
+	background-color: rgba(255, 0, 0, 0.3);
 }
 
 .asteroids {
@@ -490,7 +491,7 @@ body {
 #apophis {
 	width: 40px;
 	height: 40px;
-	background-image: url('assets/asteroid-pics/ast1.png');
+	background-image: url('./assets/asteroid-pics/ast1.png');
 	background-size: cover;
 	background-position: center;
 	border-radius: 50%;
