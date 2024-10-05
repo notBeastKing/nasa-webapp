@@ -1,0 +1,513 @@
+*,
+*:before,
+*:after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  cursor: none;
+}
+
+body {
+  font: normal 1em/1.45em "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: #fff;
+  background: radial-gradient(ellipse at bottom, #1c2837 0%, #050608 100%);
+  background-attachment: fixed;
+  overflow: hidden; /* Hide overflow for both stars and asteroids */
+}
+
+/* The Sun */
+.celestial-body {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50px; /* Reduce sun size */
+  height: 50px;
+  margin-left: -25px;
+  margin-top: -25px;
+  background: radial-gradient(ellipse at center, #ffd000 1%, #f9b700 39%, #e06317 100%);
+  background-size: contain;
+  background-color: #ffcc00;
+  border-radius: 50%;
+  box-shadow: 0 0 10px 2px rgba(255, 107, 0, 0.4), 0 0 22px 11px rgba(255, 203, 0, 0.13);
+}
+
+/* Planets */
+.planet {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px; /* Set a fixed size */
+  height: 20px;
+  transform: translate(-50%, -50%); /* Center the planet inside its hitbox */
+  border-radius: 50%;
+  pointer-events: none; /* Let hover events go to the container */
+  transition: box-shadow 0.3s ease-in-out; /* Smooth transition for glow effect */
+  
+}
+
+/* Hitbox for planets (larger than the actual planet but invisible) */
+.planet-container {
+  position: absolute;
+  width: 40px; /* Smaller hitbox width */
+  height: 40px; /* Smaller hitbox height */
+  transform: translate(-50%, -50%); /* Center hitbox relative to orbit */
+  cursor: pointer; /* Make the container clickable */
+}
+
+/* Hover glow effect */
+.planet-container:hover .planet {
+  box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8); /* White glow on hover */
+}
+
+/* Planet-specific colors and sizes */
+
+
+
+.mercury {
+  background: radial-gradient(circle at 70% 30%, #cd9064, #6f4b26);
+  box-shadow: 0 0 5px 1px #cb9671;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover; 
+  width: 10px;
+  height: 10px;
+}
+
+.venus {
+  background: radial-gradient(circle at 70% 30%, #d98c56, #d6670d);
+  box-shadow: 0 0 5px 1px #c19372;  
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 13px;
+  height: 13px;
+}
+
+.earth {
+  background: radial-gradient(circle at 70% 30%, #7ebf6a, #01acef);
+  box-shadow: 0 0 10px 2px #85d1ef;
+  background-size: contain;
+  position: relative;
+  width: 16px;
+  height: 16px;
+}
+
+.earth:after {
+  content: "";
+  position: absolute;
+  height: 5px;
+  width: 5px;
+  background: grey; /* Color of the moon */
+  box-shadow: 0 0 5px 2px #ffffff;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  margin-top: -4px; /* Centers the moon vertically relative to the orbit */
+  margin-left: 25px; /* Distance from the Earth (adjust for orbit radius) */
+  transform-origin: -25px center; /* Set the center of rotation at Earth's center */
+  animation: revolve 5s linear infinite;
+}
+
+.mars {
+  background: radial-gradient(circle at 30% 30% , #e77d11,#c1440e, #451804);
+  box-shadow: 0 0 10px 2px #e4ab72;
+  background-size: contain;
+  width: 15px;
+  height: 15px;
+}
+
+.jupiter {
+  background: radial-gradient(circle at 70% 30%, #ebf3f6,#e3dccb, #d8ca9d, #a59186,#c99039);
+  box-shadow: 0 0 10px 2px #d3c185;
+  background-size: contain;
+  width: 30px;
+  height: 30px;
+}
+
+.saturn {
+  background: radial-gradient(circle at 70% 30%,#c4b08b, #eddbad,#e2bf7d, #c3924f, #fceead);
+  background-size: contain;
+  width: 28px;
+  height: 28px;
+}
+
+.saturn:after {
+  position: absolute;
+  content: "";
+  height: 15px;  
+  width: 50px;   /* Adjust width to change the overall ring size */
+  left: 50%;
+  top: 50%;      /* Center the ring vertically */
+  transform: rotateZ(-52deg);
+  margin-left: -25px; /* Center the ring horizontally */
+  margin-top: -10px; /* Center the ring vertically */
+  border-radius: 100%; /* Makes the ring elliptical */
+  box-shadow: 0 2px 0 2px #987641, 4px 2px 0 #987641, -4px 2px 0 #987641;
+  animation: orb 882.6952471456s linear infinite;
+  animation-direction: reverse;
+  transform-origin: 50% 50%; /* Ensures smooth rotation around Saturn's center */
+}
+.uranus {
+  background: radial-gradient(circle at 70% 30%,#eddbad,#e2bf7d, #c3924f, #fceead);
+  background-size: contain;
+  width: 25px;
+  height: 25px;
+  filter:hue-rotate(180deg);
+}
+
+.neptune {
+  background: radial-gradient(circle at 70% 30%,#5b5ddf,#3f54ba, #274687);
+  background-size: contain;
+  width: 22px;
+  height: 22px;
+}
+
+/* Orbit styles */
+.orbit {
+  position: absolute;
+  border: 2px solid rgba(102, 166, 229, 0.12); /* Thinner orbit lines */
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center the orbits relative to the sun */
+}
+
+/* Orbit sizes for planets (scaled down for 1080x1920 resolution) */
+.orbit-mercury {
+  width: 84px;
+  height: 84px;
+}
+
+.orbit-venus {
+  width: 134px;
+  height: 138px;
+}
+
+.orbit-earth {
+  width: 250px;
+  height: 250px;
+}
+
+.orbit-mars {
+  width: 350px;
+  height: 340px;
+}
+
+.orbit-jupiter {
+  width: 500px;
+  height: 480px;
+}
+
+.orbit-saturn {
+  width: 600px;
+  height: 560px;
+}
+
+.orbit-uranus {
+  width: 700px;
+  height: 660px;
+}
+
+.orbit-neptune {
+  width: 900px;
+  height: 750px;
+}
+
+/* Tooltip styles */
+.tooltip {
+  position: absolute;
+  padding: 5px 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  border-radius: 5px;
+  font-size: 14px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 1000;
+}
+
+.modal {
+  display: none; /* Display modal as a flexbox */
+  position: fixed; /* Stay in place */
+  z-index: 1000; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Black background with opacity */
+  justify-content: center; /* Center modal horizontally */
+  align-items: center; /* Center modal vertically */
+  
+}
+
+.modal-content {
+  background-color: transparent; /* Background for modal content */
+  display: flex; /* Flex container for left and right content */
+  flex-direction: row; /* Aligns left and right content side by side */
+  margin: 5% auto; /* Center modal vertically */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 70%; /* 70% of screen width */
+  height: 70%; /* 70% of screen height */
+  overflow-y: auto; /* Enable scrolling if content is too tall */
+   /* Default background color for modal content */
+  position: relative; /* Position relative for background image positioning */
+  border-radius: 50px;
+}
+
+.close-button {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#modal-planet-left {
+   /* Takes up equal space in the flexbox */
+   flex: 1;
+  padding: 10px;
+  background-color:transparent; /* Optional background for left panel */
+  margin-right: 10px; /* Adds space between the two sections */
+}
+
+#modal-planet-left img {
+  display: block;
+  margin: 0 auto;
+  max-width: 70%;
+  max-height: 200px;
+  
+  object-fit: contain; /* Ensures the image fits nicely */
+}
+
+@font-face {
+  font-family: 'bebas';
+  src: url('fonts/Bebas_Neue/BebasNeue-Regular.ttf') format('truetype'); /* Make sure to specify format */
+}
+
+@font-face {
+  font-family: 'noto-san';
+  src: url('fonts/Noto_Sans_JP/NotoSansJP-VariableFont_wght.ttf') format('truetype'); /* Make sure to specify format */
+}
+
+#modal-planet-left h2 {
+  font-family: 'bebas'; /* Apply the custom font */
+  text-align: center;
+  font-size: 50px;
+  margin-bottom: 15px;
+}
+
+.animated-letter {
+  display: inline-block; /* Each letter behaves like a block */
+  opacity: 0; /* Start off invisible */
+  transform: translateY(20px); /* Move down slightly */
+  animation: appear 0.5s forwards; /* Apply the appear animation */
+  animation-delay: calc(var(--i) * 0.1s); /* Delay each letter based on its index */
+}
+
+@keyframes appear {
+  to {
+      opacity: 1; /* Fully visible */
+      transform: translateY(0); /* Move to original position */
+  }
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px); /* Start off-screen to the left */
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0); /* End in place */
+  }
+}
+
+/* Apply animation to text elements */
+.animated-text {
+  opacity: 0; /* Initially invisible */
+  animation: slideInFromLeft 0.5s forwards; /* Run animation */
+  animation-delay: var(--delay); /* Custom delay for each element */
+}
+
+
+#modal-planet-left h3 {
+  font-size: 18px;
+  color: #ddd; /* Optional text color */
+}
+
+#modal-planet-left p {
+  font-size: 16px;
+  margin-bottom: 10px;
+  line-height: 1.5;
+  color: #f2f2f2; /* Optional text color */
+}
+
+#modal-planet-right {
+   flex: 2;
+  margin-left: 100px;
+  margin-top: 50px;
+  background-color: transparent; /* Optional background for right panel */
+  overflow-y: auto; /* Scrollable content */
+}
+
+#modal-planet-right p {
+  font-size: 16px;
+  margin-bottom: 10px;
+  line-height: 1.5;
+  color: #f2f2f2; /* Optional text color */
+}
+
+/* Add responsiveness */
+@media (max-width: 768px) {
+  .modal-content {
+    flex-direction: column; /* Stacks the columns vertically for small screens */
+    height: auto; /* Adjust height for mobile view */
+  }
+  #modal-planet-left, #modal-planet-right {
+    margin-right: 0;
+  }
+}
+
+@keyframes revolve {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Asteroid Belt Layers */
+.asteroid-layer {
+  position: absolute;
+  border-radius: 50%; /* The layers are invisible now */
+  animation: rotateBelt linear infinite;
+  transform-origin: center center;
+  pointer-events: none; /* Prevent asteroids from interfering with interactions */
+  border: none !important; /* Ensure no borders or orbit lines are visible */
+}
+
+.asteroid {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+  border: none; /* No border on asteroids */
+}
+
+/* Keyframe animation for rotating the asteroid belt around the sun */
+@keyframes rotateBelt {
+  from {
+      transform: rotate(0deg);
+  }
+  to {
+      transform: rotate(360deg);
+  }
+}
+
+/* Starry background */
+.star {
+  position: absolute;
+  background-color: white;
+  border-radius: 50%;
+}
+
+/* Basic animation for orbit and asteroid movement */
+@keyframes orb {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+
+.asteroids-container {
+  position: absolute;
+  width: 80px; /* Smaller hitbox width */
+  height: 80px; /* Smaller hitbox height */
+  transform: translate(-50%, -50%); /* Center hitbox relative to orbit */
+  cursor: pointer; /* Make the container clickable */
+}
+
+.asteroids {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px; /* Set a fixed size */
+  height: 20px;
+  transform: translate(-50%, -50%); /* Center the planet inside its hitbox */
+  border-radius: 50%;
+  pointer-events: none; /* Let hover events go to the container */
+  transition: box-shadow 0.3s ease-in-out; /* Smooth transition for glow effect */
+}
+
+.asteroids-container:hover .asteroids {
+  box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8); /* White glow on hover */
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Asteroids */
+#apophis {
+  width: 10px;
+  height: 10px;
+  background-image: url('assets/asteroid-pics/ast1.png');
+  background-size: cover;
+}
+
+#bennu {
+  width: 15px;
+  height: 15px;
+  background-color: #4a90e2;
+  clip-path: polygon(35% 18%, 63% 12%, 79% 26%, 84% 63%, 60% 100%, 31% 92%, 13% 53%, 4% 21%);
+}
+
+#obj4660 {
+  width: 10px;
+  height: 10px;
+  background-color: #e2975d;
+  clip-path: polygon(35% 18%, 63% 12%, 95% 26%, 84% 63%, 52% 81%, 21% 75%, 0 45%, 6% 20%);
+}
+
+#obj2001 {
+  width: 18px;
+  height: 18px;
+  background-color: #d1b95c;
+  clip-path: polygon(38% 10%, 50% 7%, 55% 18%, 65% 35%, 68% 68%, 55% 88%, 30% 85%, 25% 65%, 10% 45%, 28% 27%);
+}
+
+#cum109p {
+  width: 26px;
+  height: 26px;
+  background-color: #a0d3f5;
+  clip-path: polygon(10% 20%, 60% 0%, 90% 40%, 80% 70%, 50% 90%, 20% 80%, 0% 50%);
+}
+
+#cumc {
+  width: 22px;
+  height: 22px;
+  background-color: #a0d3f5;
+  clip-path: polygon(30% 0%, 80% 10%, 95% 40%, 75% 85%, 40% 100%, 15% 70%, 5% 40%);
+}
